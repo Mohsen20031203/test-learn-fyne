@@ -1,25 +1,28 @@
 package main
 
 import (
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/container"
-
-	//"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
+var data = []string{"a", "string", "list"}
+
 func main() {
+	myApp := app.New()
+	myWindow := myApp.NewWindow("List Widget")
 
-	myapp := app.New()
-	mywindow := myapp.NewWindow("tabs")
+	list := widget.NewList(
+		func() int {
+			return len(data)
+		},
+		func() fyne.CanvasObject {
+			return widget.NewLabel("template")
+		},
+		func(i widget.ListItemID, o fyne.CanvasObject) {
+			o.(*widget.Label).SetText(data[i])
+		})
 
-	tabs := container.NewAppTabs(
-		container.NewTabItem("mohsen", widget.NewLabel("20")),
-		container.NewTabItem("ali", widget.NewLabel("25")),
-	)
-
-	tabs.SetTabLocation(container.TabLocationLeading)
-
-	mywindow.SetContent(tabs)
-	mywindow.ShowAndRun()
+	myWindow.SetContent(list)
+	myWindow.ShowAndRun()
 }
