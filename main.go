@@ -1,26 +1,25 @@
 package main
 
 import (
-	"image/color"
-
-	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/layout"
+
+	//"fyne.io/fyne/v2/theme"
+	"fyne.io/fyne/v2/widget"
 )
 
 func main() {
-	myApp := app.New()
-	myWindow := myApp.NewWindow("Grid Wrap Layout")
 
-	text1 := canvas.NewText("1", color.White)
-	text2 := canvas.NewText("2", color.White)
-	text3 := canvas.NewText("3", color.White)
-	grid := container.New(layout.NewGridWrapLayout(fyne.NewSize(50, 50)),
-		text1, text2, text3)
-	myWindow.SetContent(grid)
+	myapp := app.New()
+	mywindow := myapp.NewWindow("tabs")
 
-	// myWindow.Resize(fyne.NewSize(180, 75))
-	myWindow.ShowAndRun()
+	tabs := container.NewAppTabs(
+		container.NewTabItem("mohsen", widget.NewLabel("20")),
+		container.NewTabItem("ali", widget.NewLabel("25")),
+	)
+
+	tabs.SetTabLocation(container.TabLocationLeading)
+
+	mywindow.SetContent(tabs)
+	mywindow.ShowAndRun()
 }
