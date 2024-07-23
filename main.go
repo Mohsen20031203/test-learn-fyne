@@ -1,22 +1,23 @@
 package main
 
 import (
-	"fmt"
+	"image/color"
 
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/widget"
+	"fyne.io/fyne/v2/canvas"
 )
 
 func main() {
+
 	myApp := app.New()
-	myWindow := myApp.NewWindow("Hello")
-	myWindow.SetContent(widget.NewLabel("Hello"))
 
-	myWindow.Show()
-	myApp.Run()
-	tidyUp()
-}
+	mywindow := myApp.NewWindow("master")
 
-func tidyUp() {
-	fmt.Println("Exited")
+	rect := canvas.NewRectangle(color.Opaque)
+	mywindow.SetContent(rect)
+
+	mywindow.Resize(fyne.NewSize(500, 500))
+	mywindow.ShowAndRun()
+
 }
