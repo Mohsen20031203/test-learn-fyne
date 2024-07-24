@@ -3,26 +3,41 @@ package main
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
-var data = []string{"a", "string", "list"}
-
 func main() {
 	myApp := app.New()
-	myWindow := myApp.NewWindow("List Widget")
+	myWindow := myApp.NewWindow("Dark/Light Mode")
 
-	list := widget.NewList(
-		func() int {
-			return len(data)
-		},
-		func() fyne.CanvasObject {
-			return widget.NewLabel("template")
-		},
-		func(i widget.ListItemID, o fyne.CanvasObject) {
-			o.(*widget.Label).SetText(data[i])
-		})
+	// Function to set dark theme
+	setDarkTheme := func() {
+		myApp.Settings().SetTheme(theme.DarkTheme())
+	}
 
-	myWindow.SetContent(list)
+	// Function to set light theme
+	setLightTheme := func() {
+		myApp.Settings().SetTheme(theme.LightTheme())
+	}
+
+	// Create buttons for dark and light mode
+	darkButton := widget.NewButton("Dark Mode", func() {
+		setDarkTheme()
+	})
+
+	lightButton := widget.NewButton("Light Mode", func() {
+		setLightTheme()
+	})
+
+	content := container.NewVBox(
+		widget.NewLabel("Hello World!"),
+		darkButton,
+		lightButton,
+	)
+
+	myWindow.SetContent(content)
+	myWindow.Resize(fyne.NewSize(400, 200))
 	myWindow.ShowAndRun()
 }
