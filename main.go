@@ -1,43 +1,39 @@
 package main
 
 import (
+	"fmt"
+
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
 func main() {
-	myApp := app.New()
-	myWindow := myApp.NewWindow("Dark/Light Mode")
+	a := app.New()
 
-	// Function to set dark theme
-	setDarkTheme := func() {
-		myApp.Settings().SetTheme(theme.DarkTheme())
+	// بارگذاری آیکون از فایل
+	iconPath := "./icon.png"
+	iconResource, err := fyne.LoadResourceFromPath(iconPath)
+	if err != nil {
+		fmt.Printf("خطا در بارگذاری آیکون از مسیر %s: %v\n", iconPath, err)
+		return
 	}
 
-	// Function to set light theme
-	setLightTheme := func() {
-		myApp.Settings().SetTheme(theme.LightTheme())
-	}
+	// تنظیم آیکون برای برنامه
+	a.SetIcon(iconResource)
 
-	// Create buttons for dark and light mode
-	darkButton := widget.NewButton("Dark Mode", func() {
-		setDarkTheme()
-	})
+	// ایجاد یک پنجره جدید
+	w := a.NewWindow("My Fyne App")
 
-	lightButton := widget.NewButton("Light Mode", func() {
-		setLightTheme()
-	})
+	// تنظیم محتوای پنجره
+	w.SetContent(container.NewVBox(
+		widget.NewLabel("Hello Fyne!"),
+		widget.NewButton("Quit", func() {
+			a.Quit()
+		}),
+	))
 
-	content := container.NewVBox(
-		widget.NewLabel("Hello World!"),
-		darkButton,
-		lightButton,
-	)
-
-	myWindow.SetContent(content)
-	myWindow.Resize(fyne.NewSize(400, 200))
-	myWindow.ShowAndRun()
+	// نمایش و اجرای برنامه
+	w.ShowAndRun()
 }
