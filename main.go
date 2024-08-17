@@ -2,52 +2,21 @@ package main
 
 import (
 	"fmt"
-	"os"
-
-	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/theme"
-	"fyne.io/fyne/v2/widget"
 )
 
 func main() {
-	a := app.NewWithID("com.example.myapp")
+	initialIncome := 250.0
+	targetIncome := 32000.0
+	annualIncrease := 2.0
+	currentIncome := initialIncome
+	years := 0
 
-	// Use one of the default icons provided by fyne
-	iconResource := theme.FyneLogo()
-
-	// Set the icon for the application
-	a.SetIcon(iconResource)
-	fmt.Println("Icon set for the application")
-
-	// Create a new window
-	w := a.NewWindow("My Fyne App")
-
-	// Set the icon for the window
-	w.SetIcon(iconResource)
-	fmt.Println("Icon set for the window")
-
-	// Set the content of the window
-	w.SetContent(container.NewVBox(
-		widget.NewLabel("Hello Fyne!"),
-		widget.NewButton("Quit", func() {
-			a.Quit()
-		}),
-	))
-
-	// Ensure the dock icon is set on macOS
-	if fyne.CurrentDevice().IsMobile() == false {
-		if desk, ok := a.(interface {
-			SetSystemTrayIcon(fyne.Resource)
-		}); ok {
-			desk.SetSystemTrayIcon(iconResource)
-		}
+	for currentIncome < targetIncome {
+		fivePercent := currentIncome * 0.05
+		fmt.Printf("Year %d: Income = %.2f dollars, 5%% of Income = %.2f dollars\n", years+1, currentIncome, fivePercent)
+		currentIncome *= annualIncrease
+		years++
 	}
 
-	// Set the environment variable for MacOS app bundle
-	os.Setenv("FYNE_DESKTOP", "1")
-
-	// Show and run the application
-	w.ShowAndRun()
+	fmt.Printf("It will take %d years to reach or exceed the target income of %.2f dollars.\n", years, targetIncome)
 }
