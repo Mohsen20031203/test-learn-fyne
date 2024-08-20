@@ -1,22 +1,22 @@
 package main
 
 import (
-	"fmt"
+	"image/color"
+
+	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/canvas"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/layout"
 )
 
 func main() {
-	initialIncome := 250.0
-	targetIncome := 32000.0
-	annualIncrease := 2.0
-	currentIncome := initialIncome
-	years := 0
+	myApp := app.New()
+	myWindow := myApp.NewWindow("Grid Layout")
 
-	for currentIncome < targetIncome {
-		fivePercent := currentIncome * 0.05
-		fmt.Printf("Year %d: Income = %.2f dollars, 5%% of Income = %.2f dollars\n", years+1, currentIncome, fivePercent)
-		currentIncome *= annualIncrease
-		years++
-	}
-
-	fmt.Printf("It will take %d years to reach or exceed the target income of %.2f dollars.\n", years, targetIncome)
+	text1 := canvas.NewText("1", color.White)
+	text2 := canvas.NewText("2", color.White)
+	text3 := canvas.NewText("3", color.White)
+	grid := container.New(layout.NewGridLayout(2), text1, text2, text3)
+	myWindow.SetContent(grid)
+	myWindow.ShowAndRun()
 }
