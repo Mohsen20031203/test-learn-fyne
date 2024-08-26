@@ -1,26 +1,61 @@
+/*
+	1. chenge struct project interface's
+	2. Project layering's
+	3. Project folder's
+*/
+
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
-type User struct {
-	Name  string
-	Email string
+// تعریف یک interface به نام Shape
+type Shape interface {
+	Area() float64
 }
 
-func (u *User) Save() {
-	fmt.Println("User saved!")
+// پیاده‌سازی برای Rectangle
+type Rectangle struct {
+	Width, Height float64
 }
 
-type EmailService struct{}
+func (r Rectangle) Area() float64 {
+	return r.Width * r.Height
+}
 
-func (e *EmailService) SendEmail(u *User) {
-	fmt.Println("Email sent to", u.Email)
+// پیاده‌سازی برای Circle
+type Circle struct {
+	Radius float64
+}
+
+func (c Circle) Area() float64 {
+	return math.Pi * c.Radius * c.Radius
+}
+
+// پیاده‌سازی برای Triangle
+type Triangle struct {
+	Base, Height float64
+}
+
+func (t Triangle) Area() float64 {
+	return 0.5 * t.Base * t.Height
+}
+
+// تابع عمومی برای چاپ مساحت
+func printArea(shape Shape) {
+	fmt.Println("Area:", shape.Area())
 }
 
 func main() {
-	u := &User{Name: "Alice", Email: "alice@example.com"}
-	u.Save()
+	r := Rectangle{Width: 10, Height: 5}
+	c := Circle{Radius: 7}
+	c1 := Circle{Radius: 10}
+	t := Triangle{Base: 10, Height: 8}
 
-	emailService := &EmailService{}
-	emailService.SendEmail(u)
+	printArea(r)
+	printArea(c)
+	printArea(c1)
+	printArea(t)
 }
