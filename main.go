@@ -1,22 +1,26 @@
 package main
 
-import (
-	"image/color"
+import "fmt"
 
-	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/canvas"
-	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/layout"
-)
+type User struct {
+	Name  string
+	Email string
+}
+
+func (u *User) Save() {
+	fmt.Println("User saved!")
+}
+
+type EmailService struct{}
+
+func (e *EmailService) SendEmail(u *User) {
+	fmt.Println("Email sent to", u.Email)
+}
 
 func main() {
-	myApp := app.New()
-	myWindow := myApp.NewWindow("Grid Layout")
+	u := &User{Name: "Alice", Email: "alice@example.com"}
+	u.Save()
 
-	text1 := canvas.NewText("1", color.White)
-	text2 := canvas.NewText("2", color.White)
-	text3 := canvas.NewText("3", color.White)
-	grid := container.New(layout.NewGridLayout(2), text1, text2, text3)
-	myWindow.SetContent(grid)
-	myWindow.ShowAndRun()
+	emailService := &EmailService{}
+	emailService.SendEmail(u)
 }
