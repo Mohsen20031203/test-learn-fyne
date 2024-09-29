@@ -1,61 +1,75 @@
-/*
-	1. chenge struct project interface's
-	2. Project layering's
-	3. Project folder's
-*/
-
 package main
 
 import (
-	"fmt"
-	"math"
+    "fmt"
+    "github.com/syndtr/goleveldb/leveldb"
 )
 
-// تعریف یک interface به نام Shape
-type Shape interface {
-	Area() float64
+// تعریف رابط DBClient
+type DBClient interface {
+    Open() (error, *leveldb.DB)
+    Close(db *leveldb.DB)
+    Add(key, value string, db leveldb.DB) error
+    Get(key string, db leveldb.DB) string
+    Read(dbPath string) (error, []dataBace)
 }
 
-// پیاده‌سازی برای Rectangle
-type Rectangle struct {
-	Width, Height float64
+// ساختار dataBace برای پیاده‌سازی DBClient
+type dataBace struct {
+    address string
 }
 
-func (r Rectangle) Area() float64 {
-	return r.Width * r.Height
+func (db *dataBace) Open() (error, *leveldb.DB) {
+    // پیاده‌سازی باز کردن دیتابیس
+    return nil, nil
 }
 
-// پیاده‌سازی برای Circle
-type Circle struct {
-	Radius float64
+func (db *dataBace) Close(db *leveldb.DB) {
+    // پیاده‌سازی بستن دیتابیس
 }
 
-func (c Circle) Area() float64 {
-	return math.Pi * c.Radius * c.Radius
+func (db *dataBace) Add(key, value string, db leveldb.DB) error {
+    // پیاده‌سازی افزودن داده
+    return nil
 }
 
-// پیاده‌سازی برای Triangle
-type Triangle struct {
-	Base, Height float64
+func (db *dataBace) Get(key string, db leveldb.DB) string {
+    // پیاده‌سازی دریافت داده
+    return ""
 }
 
-func (t Triangle) Area() float64 {
-	return 0.5 * t.Base * t.Height
+func (db *dataBace) Read(dbPath string) (error, []dataBace) {
+    // پیاده‌سازی خواندن داده‌ها
+    return nil, nil
 }
 
-// تابع عمومی برای چاپ مساحت
-func printArea(shape Shape) {
-	fmt.Println("Area:", shape.Area())
+// تعریف نوع تابع برای ساخت DBClient
+type DBClientFactory func(address string) DBClient
+
+// تابع برای ایجاد نمونه جدید از dataBace
+var newDBClient DBClientFactory = func(address string) DBClient {
+    return &dataBace{
+        address: address,
+    }
+}
+
+// متغیر جهانی برای نگهداری دیتابیس فعلی
+var currentDBClient DBClient
+
+// تابع برای تغییر دیتابیس فعلی
+func setDatabase(address string) {
+    currentDBClient = newDBClient(address)
 }
 
 func main() {
-	r := Rectangle{Width: 10, Height: 5}
-	c := Circle{Radius: 7}
-	c1 := Circle{Radius: 10}
-	t := Triangle{Base: 10, Height: 8}
+    // انتخاب دیتابیس اول
+    setDatabase("localhost:8080")
+	currentDBClient.Add()
+    fmt.Println("Current database address:", currentDBClient)
 
-	printArea(r)
-	printArea(c)
-	printArea(c1)
-	printArea(t)
+    // استفاده از currentDBClient برای عملیات مختلف بر روی دیتابیس
+
+    // تغییر به دیتابیس جدید
+    setDatabase("localhost:9090")
+    fmt.Println("Current database address:", currentDBClient)
 }
