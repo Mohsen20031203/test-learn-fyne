@@ -1,75 +1,55 @@
 package main
 
 import (
-    "fmt"
-    "github.com/syndtr/goleveldb/leveldb"
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/canvas"
+	"fyne.io/fyne/v2/color"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/widget"
 )
 
-// تعریف رابط DBClient
-type DBClient interface {
-    Open() (error, *leveldb.DB)
-    Close(db *leveldb.DB)
-    Add(key, value string, db leveldb.DB) error
-    Get(key string, db leveldb.DB) string
-    Read(dbPath string) (error, []dataBace)
-}
-
-// ساختار dataBace برای پیاده‌سازی DBClient
-type dataBace struct {
-    address string
-}
-
-func (db *dataBace) Open() (error, *leveldb.DB) {
-    // پیاده‌سازی باز کردن دیتابیس
-    return nil, nil
-}
-
-func (db *dataBace) Close(db *leveldb.DB) {
-    // پیاده‌سازی بستن دیتابیس
-}
-
-func (db *dataBace) Add(key, value string, db leveldb.DB) error {
-    // پیاده‌سازی افزودن داده
-    return nil
-}
-
-func (db *dataBace) Get(key string, db leveldb.DB) string {
-    // پیاده‌سازی دریافت داده
-    return ""
-}
-
-func (db *dataBace) Read(dbPath string) (error, []dataBace) {
-    // پیاده‌سازی خواندن داده‌ها
-    return nil, nil
-}
-
-// تعریف نوع تابع برای ساخت DBClient
-type DBClientFactory func(address string) DBClient
-
-// تابع برای ایجاد نمونه جدید از dataBace
-var newDBClient DBClientFactory = func(address string) DBClient {
-    return &dataBace{
-        address: address,
-    }
-}
-
-// متغیر جهانی برای نگهداری دیتابیس فعلی
-var currentDBClient DBClient
-
-// تابع برای تغییر دیتابیس فعلی
-func setDatabase(address string) {
-    currentDBClient = newDBClient(address)
-}
-
 func main() {
-    // انتخاب دیتابیس اول
-    setDatabase("localhost:8080")
-	currentDBClient.Add()
-    fmt.Println("Current database address:", currentDBClient)
+	myApp := app.New()
+	myWindow := myApp.NewWindow("Hover Background Change")
 
-    // استفاده از currentDBClient برای عملیات مختلف بر روی دیتابیس
+	// ایجاد یک مستطیل برای پس‌زمینه
+	background := canvas.NewRectangle(color.White) // رنگ پیش‌فرض پس‌زمینه
+	background.SetMinSize(fyne.NewSize(400, 100))  // تنظیم اندازه مستطیل
 
-    // تغییر به دیتابیس جدید
-    setDatabase("localhost:9090")
-    fmt.Println("Current database address:", currentDBClient)
+	label := widget.NewLabel("Hover over me!")
+	label.Alignment = fyne.TextAlignCenter // مرکز چینش متن
+
+	registerBackground := canvas.NewRectangle(color.RGBA{R: 173, G: 219, B: 156, A: 200})
+	registerHeader = widget.NewLabel("Registers\n16-bit words\n")
+	registerHeader.TextStyle.Monospace = true
+	registerHeader.TextStyle.Bold = true
+	registerDisplay = cpu.GetRegisters()
+	registerDisplayWidget = widget.NewLabel(registerDisplay)
+	registerDisplayWidget.TextStyle.Monospace = true
+	registerDisplayWidget.TextStyle.Bold = true
+	registerContainer = container.NewStack(
+		registerBackground,
+		container.NewVBox(
+			registerHeader,
+			registerDisplayWidget,
+		))
+
+	// تغییر رنگ پس‌زمینه در هنگام هاور
+	label.MouseIn = func() {
+		background.FillColor = color.RGBA{R: 255, G: 0, B: 0, A: 255} // تغییر رنگ به قرمز
+		background.Refresh()                                          // به‌روزرسانی مستطیل
+	}
+
+	label.MouseOut = func() {
+		background.FillColor = color.White // برگرداندن رنگ به سفید
+		background.Refresh()               // به‌روزرسانی مستطیل
+	}
+
+	// چیدمان
+	content := container.New(layout.NewVBoxLayout(), background, label)
+	myWindow.SetContent(content)
+	myWindow.Resize(fyne.NewSize(400, 200)) // تغییر اندازه پنجره
+	myWindow.ShowAndRun()
 }
