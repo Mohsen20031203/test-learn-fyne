@@ -1,49 +1,61 @@
 package main
 
-import "math"
+import (
+	"fmt"
+	"sort"
+)
 
-type Shape interface {
-	Area() float64
-	Numebr() bool
-}
-
-type Circle struct {
-	Radius float64
-}
-
-func newTest() Shape {
-	return &Circle{}
-}
-
-func (c *Circle) Area() float64 {
-	return math.Pi * c.Radius * c.Radius
-}
-
-func (c *Circle) Numebr() bool {
-	return false
-}
-
-type example struct {
-	Number2 int
-}
-
-func newTestTwo() Shape {
-	return &example{}
-}
-
-func (e *example) Area() float64 {
-	return 0
-}
-
-func (e *example) Numebr() bool {
-	return false
+// تعریف یک ساختار برای نگهداری اطلاعات سوره
+type Surah struct {
+	Name  string
+	Ayahs int
 }
 
 func main() {
-	m := newTest()
-	m.Area()
-	m.Numebr()
+	// لیست سوره‌ها و تعداد آیات آن‌ها
+	surahs := []Surah{
+		{"کوثر", 3},
+		{"عصر", 3},
+		{"نصر", 3},
+		{"اخلاص", 4},
+		{"فیل", 5},
+		{"قریش", 4},
+		{"مسد", 5},
+		{"فلق", 5},
+		{"ناس", 6},
+		{"ماعون", 7},
+		{"تکاثر", 8},
+		{"زلزله", 8},
+		{"تین", 8},
+		{"عادیات", 11},
+		{"قارعه", 11},
+		{"ضحی", 11},
+		{"شرح", 8},
+		{"لیل", 21},
+		{"بلد", 20},
+		{"طارق", 17},
+		{"بینه", 8},
+		{"شمس", 15},
+		{"علق", 19},
+		{"انفطار", 19},
+		{"بروج", 22},
+		{"انشقاق", 25},
+		{"غاشیه", 26},
+		{"اعلی", 19},
+		{"نازعات", 46},
+		{"نبأ", 40},
+		{"عبس", 42},
+	}
 
-	n := newTestTwo()
-	n.Area()
+	// مرتب‌سازی بر اساس تعداد آیات
+	sort.Slice(surahs, func(i, j int) bool {
+		return surahs[i].Ayahs < surahs[j].Ayahs
+	})
+
+	// چاپ سوره‌ها به ترتیب از کوچک به بزرگ
+	fmt.Println("سوره‌ها به ترتیب تعداد آیات از کوچک به بزرگ:")
+	for _, surah := range surahs {
+		fmt.Printf("سوره %s - %d آیه\n", surah.Name, surah.Ayahs)
+	}
+	fmt.Println("finish")
 }
