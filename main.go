@@ -2,37 +2,30 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
 
-	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/dialog"
-	"fyne.io/fyne/v2/widget"
+	"github.com/syndtr/goleveldb/leveldb"
 )
 
 func main() {
-	myApp := app.New()
-	myWindow := myApp.NewWindow("True or False Dialog")
+	dbPath := "path/to/your/database"
 
-	label := widget.NewLabel("Click the button to answer True or False.")
+	// بررسی وجود فایل دیتابیس
+	if _, err := os.Stat("/Users/macbookpro/Desktop/helo"); os.IsNotExist(err) {
+		// اگر دیتابیس وجود ندارد، آن را ایجاد کنید
+		db, err := leveldb.OpenFile(dbPath, nil)
+		if err != nil {
+			log.Fatalf("Failed to create database: %v", err)
+		}
+		defer db.Close()
 
-	// دکمه ای که دیالوگ را نشان می‌دهد
-	button := widget.NewButton("Show Dialog", func() {
-		// دیالوگ تایید با دو گزینه True و False
-		dialog.ShowConfirm("True or False", "Please select True or False:",
-			func(response bool) {
-				if response {
-					label.SetText("You selected: True")
-					fmt.Println("User selected: True")
-				} else {
-					label.SetText("You selected: False")
-					fmt.Println("User selected: False")
-				}
-			}, myWindow)
-	})
+		fmt.Println("Database created successfully.")
+	} else {
+		// اگر دیتابیس وجود دارد، کار دیگری انجام دهید
+		fmt.Println("Database already exists. Performing other actions.")
 
-	content := container.NewVBox(label, button)
-	myWindow.SetContent(content)
-	myWindow.Resize(fyne.NewSize(300, 200))
-	myWindow.ShowAndRun()
+		// کد مورد نیاز برای انجام کار دیگر
+		// ...
+	}
 }
