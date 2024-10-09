@@ -2,60 +2,37 @@ package main
 
 import (
 	"fmt"
-	"sort"
+
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/widget"
 )
 
-// تعریف یک ساختار برای نگهداری اطلاعات سوره
-type Surah struct {
-	Name  string
-	Ayahs int
-}
-
 func main() {
-	// لیست سوره‌ها و تعداد آیات آن‌ها
-	surahs := []Surah{
-		{"کوثر", 3},
-		{"عصر", 3},
-		{"نصر", 3},
-		{"اخلاص", 4},
-		{"فیل", 5},
-		{"قریش", 4},
-		{"مسد", 5},
-		{"فلق", 5},
-		{"ناس", 6},
-		{"ماعون", 7},
-		{"تکاثر", 8},
-		{"زلزله", 8},
-		{"تین", 8},
-		{"عادیات", 11},
-		{"قارعه", 11},
-		{"ضحی", 11},
-		{"شرح", 8},
-		{"لیل", 21},
-		{"بلد", 20},
-		{"طارق", 17},
-		{"بینه", 8},
-		{"شمس", 15},
-		{"علق", 19},
-		{"انفطار", 19},
-		{"بروج", 22},
-		{"انشقاق", 25},
-		{"غاشیه", 26},
-		{"اعلی", 19},
-		{"نازعات", 46},
-		{"نبأ", 40},
-		{"عبس", 42},
-	}
+	myApp := app.New()
+	myWindow := myApp.NewWindow("True or False Dialog")
 
-	// مرتب‌سازی بر اساس تعداد آیات
-	sort.Slice(surahs, func(i, j int) bool {
-		return surahs[i].Ayahs < surahs[j].Ayahs
+	label := widget.NewLabel("Click the button to answer True or False.")
+
+	// دکمه ای که دیالوگ را نشان می‌دهد
+	button := widget.NewButton("Show Dialog", func() {
+		// دیالوگ تایید با دو گزینه True و False
+		dialog.ShowConfirm("True or False", "Please select True or False:",
+			func(response bool) {
+				if response {
+					label.SetText("You selected: True")
+					fmt.Println("User selected: True")
+				} else {
+					label.SetText("You selected: False")
+					fmt.Println("User selected: False")
+				}
+			}, myWindow)
 	})
 
-	// چاپ سوره‌ها به ترتیب از کوچک به بزرگ
-	fmt.Println("سوره‌ها به ترتیب تعداد آیات از کوچک به بزرگ:")
-	for _, surah := range surahs {
-		fmt.Printf("سوره %s - %d آیه\n", surah.Name, surah.Ayahs)
-	}
-	fmt.Println("finish")
+	content := container.NewVBox(label, button)
+	myWindow.SetContent(content)
+	myWindow.Resize(fyne.NewSize(300, 200))
+	myWindow.ShowAndRun()
 }
