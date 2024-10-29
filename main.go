@@ -1,61 +1,59 @@
-/*
-	1. chenge struct project interface's
-	2. Project layering's
-	3. Project folder's
-*/
-
 package main
 
 import (
-	"fmt"
-	"math"
+	"log"
+	"os"
+	"time"
+
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/widget"
+	"github.com/faiface/beep"
+	"github.com/faiface/beep/mp3"
+	"github.com/faiface/beep/speaker"
 )
 
-// تعریف یک interface به نام Shape
-type Shape interface {
-	Area() float64
-}
+func playMusic(filename string) {
+	f, err := os.Open(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
 
-// پیاده‌سازی برای Rectangle
-type Rectangle struct {
-	Width, Height float64
-}
+	streamer, format, err := mp3.Decode(f)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer streamer.Close()
 
-func (r Rectangle) Area() float64 {
-	return r.Width * r.Height
-}
+	speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/10))
 
-// پیاده‌سازی برای Circle
-type Circle struct {
-	Radius float64
-}
+	done := make(chan bool)
+	speaker.Play(beep.Seq(streamer, beep.Callback(func() {
+		done <- true
+	})))
 
-func (c Circle) Area() float64 {
-	return math.Pi * c.Radius * c.Radius
-}
-
-// پیاده‌سازی برای Triangle
-type Triangle struct {
-	Base, Height float64
-}
-
-func (t Triangle) Area() float64 {
-	return 0.5 * t.Base * t.Height
-}
-
-// تابع عمومی برای چاپ مساحت
-func printArea(shape Shape) {
-	fmt.Println("Area:", shape.Area())
+	<-done
 }
 
 func main() {
-	r := Rectangle{Width: 10, Height: 5}
-	c := Circle{Radius: 7}
-	c1 := Circle{Radius: 10}
-	t := Triangle{Base: 10, Height: 8}
+	a := app.New()
+	w := a.NewWindow("Music Player")
 
-	printArea(r)
-	printArea(c)
-	printArea(c1)
-	printArea(t)
+	var ball bool
+	playButton := widget.NewButton("Play Music", func() {
+		if !ball {
+
+			go func() {
+				playMusic("/Users/macbookpro/Downloads/dayone.mp3")
+			}()
+			ball = true
+		} else {
+
+		}
+	})
+
+	w.SetContent(playButton)
+	w.Resize(fyne.NewSize(200, 100))
+	w.ShowAndRun()
 }

@@ -1,0 +1,15 @@
+# Ignore build script
+cmd/myapp/LevelManage.app/Contents
+*.ldb
+*.log
+LOG
+LOG.old
+CURRENT
+MANIFEST-*
+*.json
+test
+__debug_bin*
+*.txt
+.DS_Store
+cmd/.DS_Store
+services
