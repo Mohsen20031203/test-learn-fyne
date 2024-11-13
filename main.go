@@ -1,59 +1,78 @@
 package main
 
 import (
-	"log"
+	"fmt"
+	"io/ioutil"
 	"os"
-	"time"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
-	"github.com/faiface/beep"
-	"github.com/faiface/beep/mp3"
-	"github.com/faiface/beep/speaker"
 )
 
-func playMusic(filename string) {
-	f, err := os.Open(filename)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-
-	streamer, format, err := mp3.Decode(f)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer streamer.Close()
-
-	speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/10))
-
-	done := make(chan bool)
-	speaker.Play(beep.Seq(streamer, beep.Callback(func() {
-		done <- true
-	})))
-
-	<-done
-}
-
 func main() {
-	a := app.New()
-	w := a.NewWindow("Music Player")
+	myApp := app.New()
+	myWindow := myApp.NewWindow("Show data to byte")
 
-	var ball bool
-	playButton := widget.NewButton("Play Music", func() {
-		if !ball {
+	displayContainer := container.NewVBox()
+	displayContainer2 := container.NewVBox()
+	var file *os.File
+	var Byte []byte
+	var err error
 
-			go func() {
-				playMusic("/Users/macbookpro/Downloads/dayone.mp3")
-			}()
-			ball = true
-		} else {
+	saveButton := widget.NewButton("Show data to byte", func() {
 
+		file, err = os.Open("/Users/macbookpro/Desktop/game.jpg")
+		if err != nil {
+			return
 		}
+		defer file.Close()
+
+		// خواندن کل محتوای فایل
+		Byte, err = ioutil.ReadAll(file)
+
+		displayBytesInChunks(Byte, displayContainer, displayContainer2)
 	})
 
-	w.SetContent(playButton)
-	w.Resize(fyne.NewSize(200, 100))
-	w.ShowAndRun()
+	content := container.NewVBox(
+		saveButton,
+		displayContainer,
+	)
+
+	m := container.NewVScroll(content)
+	mainContent := container.NewBorder(nil, nil, nil, nil, m)
+
+	columns := container.NewHSplit(mainContent, displayContainer2)
+	myWindow.SetContent(columns)
+	myWindow.Resize(fyne.NewSize(800, 800))
+	myWindow.ShowAndRun()
+}
+
+func displayBytesInChunks(input []byte, displayContainer, displayContainer2 *fyne.Container) {
+	chunkSize := 300
+	textLength := len(input)
+
+	displayContainer.Objects = nil
+
+	for i := 0; i < textLength; i += chunkSize {
+		end := i + chunkSize
+		if end > textLength {
+			end = textLength
+		}
+
+		buttomTest := widget.NewButton(fmt.Sprintf("part %d", i+1), func() {
+
+			m := widget.NewMultiLineEntry()
+			m.Text = fmt.Sprintf("part %d: % X", i/chunkSize+1, input[i:end])
+			if len(displayContainer2.Objects) > 0 {
+				displayContainer2.Objects[0] = m
+			} else {
+				displayContainer2.Add(m)
+			}
+		})
+
+		displayContainer.Add(buttomTest)
+
+	}
 }

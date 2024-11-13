@@ -38,6 +38,8 @@ require (
 	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/yuin/goldmark v1.7.1 // indirect
+	github.com/ziutek/glib v0.0.0-20141105171902-a43f7a959840 // indirect
+	github.com/ziutek/gst v0.0.0-20210107120415-007422cec673 // indirect
 	golang.org/x/exp/shiny v0.0.0-20241009180824-f66d83c29e7c // indirect
 	golang.org/x/image v0.21.0 // indirect
 	golang.org/x/mobile v0.0.0-20241016134751-7ff83004ec2c // indirect
