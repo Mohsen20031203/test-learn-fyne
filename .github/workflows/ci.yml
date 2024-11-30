@@ -30,8 +30,12 @@ jobs:
       - name: Build the project
         run: go build -v ./...
 
+      - name: Fetch all tags
+        run: git fetch --tags
+      
       - name: List tags in the repository
         run: git tag
+      
 
       - name: Upload new asset to release
         uses: softprops/action-gh-release@v1
