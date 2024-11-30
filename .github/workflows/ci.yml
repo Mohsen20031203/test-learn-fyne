@@ -29,3 +29,11 @@ jobs:
 
       - name: Build the project
         run: go build -v ./...
+
+      - name: Upload new asset to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: /Users/macbookpro/Documents/GitHub/test-learn-fyne/example.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
