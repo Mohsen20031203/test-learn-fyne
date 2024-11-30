@@ -33,11 +33,6 @@ jobs:
       - name: List tags in the repository
         run: git tag
 
-      - name: Create a new tagff
-        run: |
-          git tag v1.1.0
-          git push https://Mohsen20031203:${{ secrets.GITHUB_TOKEN }}@github.com/Mohsen20031203/test-learn-fyne.git v1.1.0
-
       - name: Upload new asset to release
         uses: softprops/action-gh-release@v1
         with:
