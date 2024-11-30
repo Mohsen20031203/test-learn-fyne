@@ -35,9 +35,6 @@ jobs:
         
       - name: List tags in the repository
         run: git tag
-        
-      - name: Fetch all tags
-        run: git fetch --tags
 
       - name: Upload new asset to release
         uses: softprops/action-gh-release@v1
