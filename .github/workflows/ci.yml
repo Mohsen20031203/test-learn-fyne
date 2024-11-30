@@ -44,4 +44,4 @@ jobs:
           files: example.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REF: refs/tags/v1.0.0
+          GITHUB_REF: refs/tags/v1.1.0
