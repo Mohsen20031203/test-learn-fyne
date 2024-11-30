@@ -33,6 +33,10 @@ jobs:
       - name: Print GitHub Ref
         run: echo $GITHUB_REF
 
+      - name: List tags in the repository
+        run: git tag
+      
+
       - name: Upload new asset to release
         uses: softprops/action-gh-release@v1
         with:
