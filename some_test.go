@@ -22,3 +22,14 @@ func TestFileContent(t *testing.T) {
 		t.Log("تست با موفقیت انجام شد. متن صحیح است.")
 	}
 }
+
+func TestMn(t *testing.T) {
+	content, err := os.ReadFile("example.txt")
+	if err != nil {
+		t.Fatalf("خطا در خواندن فایل: %v", err)
+	}
+
+	if content != nil {
+		t.Log("yes")
+	}
+}
