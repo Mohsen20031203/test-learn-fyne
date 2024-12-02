@@ -33,6 +33,15 @@ jobs:
       - name: Fetch all tags
         run: git fetch --tags
 
+      - name: Create new tag if not exists
+        run: |
+          latest_tag=$(git tag -l "v*" | sort -V | tail -n 1)
+          if [ -z "$latest_tag" ]; then
+            echo "No tags found, creating v1.0.0"
+            git tag v1.0.0
+            git push origin v1.0.0
+          fi
+
       - name: Upload new asset to release
         uses: softprops/action-gh-release@v1
         with:
