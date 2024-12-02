@@ -33,32 +33,36 @@ jobs:
       - name: Fetch all tags
         run: git fetch --tags --force
 
-
       - name: Check latest tag
         run: |
           latest_tag=$(git tag -l "v*" | sort -V | tail -n 1)
           echo "Latest tag: $latest_tag"
-      
-      
 
       - name: Create new tag if not exists
         run: |
-         latest_tag=$(git tag -l "v*" | sort -V | tail -n 1)
-         if [ -z "$latest_tag" ]; then
-         echo "No tags found, creating v1.0.0"
-          git tag v1.0.0
-         git push origin v1.0.0
-         fi
+          latest_tag=$(git tag -l "v*" | sort -V | tail -n 1)
+          if [ -z "$latest_tag" ]; then
+          echo "No tags found, creating v1.0.0"
+           git tag v1.0.0
+          git push origin v1.0.0
+          fi
+
+      - name: Determine latest tag
+        id: check_latest_tag
+        run: |
+          latest_tag=$(git tag -l "v*" | sort -V | tail -n 1)
+          echo "Latest tag: $latest_tag"
+          echo "latest_tag=$latest_tag" >> $GITHUB_ENV
 
 
       - name: Upload new asset to release
         uses: softprops/action-gh-release@v1
         with:
-           files: example.txt
+            files: example.txt
         env:
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: steps.check_latest_tag.outputs.latest_tag != ''
-       
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: env.latest_tag != ''
+        
 
   release:
     runs-on: ubuntu-latest
@@ -76,25 +80,24 @@ jobs:
 
       - name: Create or Update Release
         run: |
-            latest_tag=$(git tag -l "v*" | sort -V | tail -n 1)
-        
-            if [ -z "$latest_tag" ]; then
-              echo "No tags found. Creating v1.0.0 release."
-              if gh release view v1.0.0 --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
-                echo "Release v1.0.0 already exists. Skipping creation."
-              else
-                gh release create v1.0.0 example.txt --repo "$GITHUB_REPOSITORY"
-              fi
+          latest_tag=$(git tag -l "v*" | sort -V | tail -n 1)
+
+          if [ -z "$latest_tag" ]; then
+            echo "No tags found. Creating v1.0.0 release."
+            if gh release view v1.0.0 --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+              echo "Release v1.0.0 already exists. Skipping creation."
             else
-              echo "Using latest tag: $latest_tag"
-              if gh release view "$latest_tag" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
-                echo "Release for tag $latest_tag already exists. Uploading assets."
-                gh release upload "$latest_tag" example.txt --repo "$GITHUB_REPOSITORY" --clobber
-              else
-                echo "Release for tag $latest_tag does not exist. Creating new release."
-                gh release create "$latest_tag" example.txt --repo "$GITHUB_REPOSITORY"
-              fi
+              gh release create v1.0.0 example.txt --repo "$GITHUB_REPOSITORY"
             fi
+          else
+            echo "Using latest tag: $latest_tag"
+            if gh release view "$latest_tag" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+              echo "Release for tag $latest_tag already exists. Uploading assets."
+              gh release upload "$latest_tag" example.txt --repo "$GITHUB_REPOSITORY" --clobber
+            else
+              echo "Release for tag $latest_tag does not exist. Creating new release."
+              gh release create "$latest_tag" example.txt --repo "$GITHUB_REPOSITORY"
+            fi
+          fi
         env:
-            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
