@@ -54,7 +54,7 @@ jobs:
       - name: Upload new asset to release
         uses: softprops/action-gh-release@v1
         with:
-           files: 
+           files: example.txt
         env:
            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: steps.check_latest_tag.outputs.latest_tag != ''
