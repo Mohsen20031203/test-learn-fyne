@@ -56,13 +56,13 @@ jobs:
 
       - name: Create or Update Release
         run: |
-          release=$(gh release list --repo $GITHUB_REPOSITORY | grep "v" | head -n 1)
-          if [ -z "$release" ]; then
-            # If no release exists, create a new one
+          latest_tag=$(git tag -l "v*" | sort -V | tail -n 1)
+          if [ -z "$latest_tag" ]; then
+            # If no tags exist, create a new release with v1.0.0
             gh release create v1.0.0 example.txt --repo $GITHUB_REPOSITORY
           else
-            # If release exists, upload the new file to the existing release
-            gh release upload v1.0.0 example.txt --repo $GITHUB_REPOSITORY --clobber
+            # If tags exist, use the latest tag and upload the file to that release
+            gh release upload "$latest_tag" example.txt --repo $GITHUB_REPOSITORY --clobber
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
