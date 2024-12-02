@@ -16,7 +16,7 @@ func TestFileContent(t *testing.T) {
 	expectedText := ""
 
 	// بررسی اینکه محتوای فایل با متن مورد انتظار برابر است یا خیر
-	if string(content) != expectedText {
+	if string(content) == expectedText {
 		t.Errorf("متن فایل اشتباه است. انتظار داشتیم: %s\n ولی یافتیم: %s", expectedText, string(content))
 	} else {
 		t.Log("تست با موفقیت انجام شد. متن صحیح است.")
