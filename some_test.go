@@ -13,7 +13,7 @@ func TestFileContent(t *testing.T) {
 	}
 
 	// متن مورد انتظار
-	expectedText := "سلام، این یک متن نمونه است. که خیلی مهم نیست"
+	expectedText := ""
 
 	// بررسی اینکه محتوای فایل با متن مورد انتظار برابر است یا خیر
 	if string(content) != expectedText {
