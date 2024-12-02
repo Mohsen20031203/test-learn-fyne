@@ -59,9 +59,10 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
             files: example.txt
+            tag_name: ${{ env.latest_tag }}
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: env.latest_tag != ''
+        
         
 
   release:
