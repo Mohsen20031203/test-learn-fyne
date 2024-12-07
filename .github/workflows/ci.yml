@@ -24,25 +24,24 @@ jobs:
         run: go install fyne.io/fyne/v2/cmd/fyne@latest
 
       - name: Create output directory
-        run: mkdir -p cmd/KV-Toolbox/output\
+        run: mkdir -p output\
     
       - name: cd cmd
         run : ls
 
       - name: Build for macOS
         run: |
-          cd cmd/KV-Toolbox
           fyne package -os darwin -icon icon.png -name ManageDB
           mv ManageDB.app output
 
       - name: List output directory
-        run: ls cmd/KV-Toolbox/output
+        run: ls output
 
       - name: Upload macOS Artifact
         uses: actions/upload-artifact@v3
         with:
           name: output-macos
-          path: cmd/KV-Toolbox/output
+          path: output
 
   build-windows:
     needs: build-macos
@@ -61,7 +60,6 @@ jobs:
 
       - name: Build for Windows
         run: |
-          cd cmd/KV-Toolbox
           fyne package -os windows -icon icon.png -name ManageDB
           mv ManageDB.exe output
 
@@ -72,7 +70,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: output-windows
-          path: cmd/KV-Toolbox/output
+          path: output
 
   build-linux:
     needs: build-windows
@@ -90,19 +88,18 @@ jobs:
         run: go install fyne.io/fyne/v2/cmd/fyne@latest
 
       - name: Create output directory
-        run: mkdir -p cmd/KV-Toolbox/output
+        run: mkdir -p output
 
       - name: Build for Linux
         run: |
-          cd cmd/KV-Toolbox
           fyne package -os linux -icon icon.png -name ManageDB
           mv ManageDB output/ManageDB-linux
 
       - name: List output directory
-        run: ls cmd/KV-Toolbox/output
+        run: ls output
 
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v3
         with:
           name: output-linux
-          path: cmd/KV-Toolbox/output
+          path: output
