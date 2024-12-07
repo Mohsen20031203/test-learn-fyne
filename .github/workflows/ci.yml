@@ -3,7 +3,7 @@ name: Go CI
 on:
   push:
     branches:
-      - Create-pipeline
+      - main
   pull_request:
     branches:
       - main
