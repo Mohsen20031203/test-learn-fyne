@@ -32,11 +32,10 @@ jobs:
       - name: Create output directory
         run: mkdir -p output
 
-      - name: Debug build process
+      - name: Build for Linux
         run: |
-          fyne package -os linux -icon icon.png -name ManageDB || true
-          echo "Error log:"
-          cat output.log || echo "No additional log available."
+          fyne package -os linux -icon icon.png -name ManageDB
+          mv ManageDB output/ManageDB
 
       - name: List output directory
         run: ls output
