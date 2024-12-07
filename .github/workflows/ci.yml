@@ -120,3 +120,27 @@ jobs:
         with:
           name: output-macos
           path: output
+
+          
+  create-report:
+    needs: build-macos
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create summary report
+        run: |
+          echo "Build Report" > build_report.txt
+          echo "====================" >> build_report.txt
+          echo "Linux Build" >> build_report.txt
+          ls -lh output/ManageDB.tar.xz >> build_report.txt
+          echo "" >> build_report.txt
+          echo "Windows Build" >> build_report.txt
+          ls -lh output/ManageDB.exe >> build_report.txt
+          echo "" >> build_report.txt
+          echo "macOS Build" >> build_report.txt
+          ls -lh output/ManageDB.app >> build_report.txt
+
+      - name: Upload Build Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-report
+          path: build_report.txt
