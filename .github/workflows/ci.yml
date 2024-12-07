@@ -24,7 +24,10 @@ jobs:
         run: go install fyne.io/fyne/v2/cmd/fyne@latest
 
       - name: Create output directory
-        run: mkdir -p cmd/KV-Toolbox/output
+        run: mkdir -p cmd/KV-Toolbox/output\
+    
+      - name: cd cmd
+        run : ls
 
       - name: Build for macOS
         run: |
