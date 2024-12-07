@@ -40,6 +40,11 @@ jobs:
           fyne package -os linux -icon icon.png -name ManageDB
           mv ManageDB.tar.xz output
 
+      - name: Check file size
+        run: |
+          ls -lh output/ManageDB.tar.xz
+          
+
       - name: List output directory
         run: ls output
 
