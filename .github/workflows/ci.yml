@@ -25,16 +25,18 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libgl1-mesa-dev xorg-dev libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev
 
+
       - name: Install Fyne CLI
         run: go install fyne.io/fyne/v2/cmd/fyne@latest
 
       - name: Create output directory
         run: mkdir -p output
 
-      - name: Build for Linux
+      - name: Debug build process
         run: |
-          fyne package -os linux -icon icon.png -name ManageDB
-          mv ManageDB output/ManageDB-linux
+          fyne package -os linux -icon icon.png -name ManageDB || true
+          echo "Error log:"
+          cat output.log || echo "No additional log available."
 
       - name: List output directory
         run: ls output
