@@ -9,42 +9,7 @@ on:
       - main
 
 jobs:
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: 1.23.2
-
-      - name: Install Fyne CLI
-        run: |
-            go install fyne.io/fyne/v2/cmd/fyne@latest
-            echo "C:\Users\runneradmin\go\bin" >> $env:GITHUB_PATH
-            fyne version
-
-      - name: Create output directory
-        run: mkdir output
-
-      - name: Build for Windows
-        run: |
-          fyne package -os windows -icon icon.png -name ManageDB
-          mv ManageDB.exe output
-
-      - name: List output directory
-        run: dir output
-
-      - name: Upload Windows Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: output-windows
-          path: output
-
   build-linux:
-    needs: build-windows
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -54,6 +19,11 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: 1.23.2
+
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1-mesa-dev xorg-dev libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev
 
       - name: Install Fyne CLI
         run: go install fyne.io/fyne/v2/cmd/fyne@latest
@@ -75,8 +45,43 @@ jobs:
           name: output-linux
           path: output
 
-  build-macos:
+  build-windows:
     needs: build-linux
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.23.2
+
+      - name: Install Fyne CLI
+        run: |
+          go install fyne.io/fyne/v2/cmd/fyne@latest
+          echo "C:\Users\runneradmin\go\bin" >> $env:GITHUB_PATH
+          fyne version
+
+      - name: Create output directory
+        run: mkdir output
+
+      - name: Build for Windows
+        run: |
+          fyne package -os windows -icon icon.png -name ManageDB
+          mv ManageDB.exe output
+
+      - name: List output directory
+        run: dir output
+
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: output-windows
+          path: output
+
+  build-macos:
+    needs: build-windows
     runs-on: macos-latest
     steps:
       - name: Checkout code
