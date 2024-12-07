@@ -35,9 +35,16 @@ jobs:
         run: ls
 
 
+
       - name: Build for Linux
         run: |
           fyne package -os linux -icon icon.png -name ManageDB
+
+      - name: list
+        run: ls
+
+      - name: Move output file
+        run: |
           mv ManageDB output/ManageDB
 
       - name: List output directory
