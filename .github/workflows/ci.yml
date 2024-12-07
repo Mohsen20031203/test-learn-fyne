@@ -86,7 +86,7 @@ jobs:
 
       - name: Create output directory
         run: mkdir -p output
-    
+
       - name: Build for macOS
         run: |
           fyne package -os darwin -icon icon.png -name ManageDB
