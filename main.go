@@ -2,25 +2,38 @@ package main
 
 import (
 	"fmt"
-	"os"
+
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/widget"
 )
 
 func main() {
-	// باز کردن یا ایجاد فایل برای نوشتن
-	file, err := os.Create("example.txt")
-	if err != nil {
-		fmt.Println("خطا در باز کردن فایل:", err)
-		return
-	}
-	defer file.Close() // بستن فایل بعد از اتمام کار
+	// شروع برنامه
+	myApp := app.New()
+	myWindow := myApp.NewWindow("ManageDB")
 
-	// نوشتن متن در فایل
-	text := "سلام، این یک متن نمونه است."
-	_, err = file.WriteString(text)
-	if err != nil {
-		fmt.Println("خطا در نوشتن در فایل:", err)
-		return
-	}
+	// ایجاد ویجت‌ها
+	entry := widget.NewEntry()
+	entry.SetPlaceHolder("نام را وارد کنید...")
 
-	fmt.Println("متن با موفقیت نوشته شد.")
+	label := widget.NewLabel("لطفاً نام خود را وارد کنید")
+
+	button := widget.NewButton("نمایش نام", func() {
+		label.SetText(fmt.Sprintf("نام وارد شده: %s", entry.Text))
+	})
+
+	// طراحی رابط کاربری
+	content := container.NewVBox(
+		label,
+		entry,
+		button,
+	)
+
+	myWindow.SetContent(content)
+	myWindow.Resize(fyne.NewSize(400, 300))
+
+	// نمایش پنجره
+	myWindow.ShowAndRun()
 }
