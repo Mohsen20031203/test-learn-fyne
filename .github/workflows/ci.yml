@@ -154,6 +154,11 @@ jobs:
                   echo "macOS Output:"
                   ls -lh output/macos
           
+      - name: Log linux Build Info
+        run: |
+                  echo "Linux Build:"
+                  ls -lh output/linux/ManageDB.tar.xz
+          
       - name: Log Windows Build Info
         run: |
                   echo "Windows Build:"
@@ -166,12 +171,12 @@ jobs:
   
       - name: Test Linux Binary
         run: |
-            tar -xf output/ManageDB.tar.xz
+            tar -xf output/linux/ManageDB.tar.xz
             ./ManageDB --help
 
       - name: Test windows Binary
-        run: .\output\ManageDB.exe --help
+        run: output/windows/ManageDB.exe --help
 
       - name: Test macos Binary
-        run: open output/ManageDB.app
+        run: open output/macos/ManageDB.app
 
