@@ -10,7 +10,7 @@ on:
 
 jobs:
   build-linux:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -128,6 +128,7 @@ jobs:
     steps:
       - name: Log Linux Build Info
         run: |
+          ls
           echo "Linux Build:"
           ls -lh output/ManageDB.tar.xz
 
