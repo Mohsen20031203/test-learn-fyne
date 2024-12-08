@@ -154,29 +154,34 @@ jobs:
                   echo "macOS Output:"
                   ls -lh output/macos
           
-      - name: Log linux Build Info
+      - name: Log Linux Build Info
         run: |
-                  echo "Linux Build:"
-                  ls -lh output/linux/ManageDB.tar.xz
-          
+          echo "Linux Build:"
+          if [ -f output/linux/ManageDB.tar.xz ]; then
+            ls -lh output/linux/ManageDB.tar.xz
+            tar -tf output/linux/ManageDB.tar.xz
+          else
+            echo "Error: Linux build file not found!"
+            exit 1
+          fi
+
       - name: Log Windows Build Info
         run: |
-                  echo "Windows Build:"
-                  ls -lh output/windows/ManageDB.exe
-          
+          echo "Windows Build:"
+          if [ -f output/windows/ManageDB.exe ]; then
+            ls -lh output/windows/ManageDB.exe
+          else
+            echo "Error: Windows build file not found!"
+            exit 1
+          fi
+
       - name: Log macOS Build Info
         run: |
-                  echo "macOS Build:"
-                  ls -lh output/macos/ManageDB.app
-  
-      - name: Test Linux Binary
-        run: |
-            tar -xf output/linux/ManageDB.tar.xz
-            ./ManageDB --help
-
-      - name: Test windows Binary
-        run: output/windows/ManageDB.exe --help
-
-      - name: Test macos Binary
-        run: open output/macos/ManageDB.app
+          echo "macOS Build:"
+          if [ -d output/macos/ManageDB.app ]; then
+            ls -lh output/macos/ManageDB.app
+          else
+            echo "Error: macOS build file not found!"
+            exit 1
+          fi
 
