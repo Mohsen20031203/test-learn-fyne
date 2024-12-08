@@ -164,3 +164,14 @@ jobs:
                   echo "macOS Build:"
                   ls -lh output/macos/ManageDB.app
   
+      - name: Test Linux Binary
+        run: |
+            tar -xf output/ManageDB.tar.xz
+            ./ManageDB --help
+
+      - name: Test windows Binary
+        run: .\output\ManageDB.exe --help
+
+      - name: Test macos Binary
+        run: open output/ManageDB.app
+
