@@ -129,8 +129,7 @@ jobs:
       - name: Log Linux Build Info
         run: |
           ls
-          echo "Linux Build:"
-          ls -lh output/ManageDB.tar.xz
+        
 
       - name: Log Windows Build Info
         run: |
