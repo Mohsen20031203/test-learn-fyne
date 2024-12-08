@@ -126,10 +126,14 @@ jobs:
     needs: build-macos
     runs-on: ubuntu-latest
     steps:
+
+      - name: Create output directory
+        run: mkdir -p output
+        
       - name: Log Linux Build Info
         run: |
           ls
-        
+
 
       - name: Log Windows Build Info
         run: |
