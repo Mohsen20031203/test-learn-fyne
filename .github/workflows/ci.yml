@@ -121,31 +121,46 @@ jobs:
           name: output-macos
           path: output
 
-
   create-report:
     needs: build-macos
     runs-on: ubuntu-latest
     steps:
-
-      - name: Create output directory
-        run: mkdir -p output
-
-      - name: ls gneral
+      - name: Download Linux Artifact
+        uses: actions/download-artifact@v3
+        with:
+            name: output-linux
+            path: output/linux
+          
+      - name: Download Windows Artifact
+        uses: actions/download-artifact@v3
+        with:
+            name: output-windows
+            path: output/windows
+          
+      - name: Download macOS Artifact
+        uses: actions/download-artifact@v3
+        with:
+                  name: output-macos
+                  path: output/macos
+          
+      - name: List all outputs
         run: |
-          ls
-      - name: ls output
-        run: |
-          cd output
-          ls
-
-
-
+                  echo "Linux Output:"
+                  ls -lh output/linux
+                  echo ""
+                  echo "Windows Output:"
+                  ls -lh output/windows
+                  echo ""
+                  echo "macOS Output:"
+                  ls -lh output/macos
+          
       - name: Log Windows Build Info
         run: |
-          echo "Windows Build:"
-          ls -lh output/ManageDB.exe
-
+                  echo "Windows Build:"
+                  ls -lh output/windows/ManageDB.exe
+          
       - name: Log macOS Build Info
         run: |
-          echo "macOS Build:"
-          ls -lh output/ManageDB.app
+                  echo "macOS Build:"
+                  ls -lh output/macos/ManageDB.app
+  
