@@ -129,10 +129,15 @@ jobs:
 
       - name: Create output directory
         run: mkdir -p output
-        
-      - name: Log Linux Build Info
+
+      - name: ls gneral
         run: |
           ls
+      - name: ls output
+        run: |
+          cd output
+          ls
+
 
 
       - name: Log Windows Build Info
