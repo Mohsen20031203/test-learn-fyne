@@ -1,1 +1,3 @@
-سلام، این یک متن نمونه است. که خیلی مهم نیست و این برای بار دوم است که تست میکنم
+1. linux : https://github.com/Mohsen20031203/test-learn-fyne/actions/runs/12219753431/artifacts/2289921501
+2. macos : https://github.com/Mohsen20031203/test-learn-fyne/actions/runs/12219753431/artifacts/2289921504
+3. window: https://github.com/Mohsen20031203/test-learn-fyne/actions/runs/12219753431/artifacts/2289921505
